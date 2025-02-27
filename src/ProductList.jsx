@@ -1,10 +1,13 @@
 import React, { useState,useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
+import { useDispatch } from 'react-redux';
+import { addItem } from './CartSlice';
 function ProductList() {
     const [showCart, setShowCart] = useState(false); 
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
-
+    const [addedToCart, setAddedToCart] = useState([])
+    const dispatch = useDispatch();
     const plantsArray = [
         {
             category: "Air Purifying Plants",
@@ -231,7 +234,7 @@ function ProductList() {
     color: 'white',
     fontSize: '30px',
     textDecoration: 'none',
-   }
+   }    
    const handleCartClick = (e) => {
     e.preventDefault();
     setShowCart(true); // Set showCart to true when cart icon is clicked
@@ -247,7 +250,9 @@ const handlePlantsClick = (e) => {
     setShowCart(false);
   };
   const handleAddToCart = (e) => {
-    e.preventDefault();
+    dispatch(addItem(e));
+    setAddedToCart([...addedToCart, e.name]);
+
   };
     return (
         <>
@@ -282,7 +287,10 @@ const handlePlantsClick = (e) => {
                                 <div className='product-title'>{plants.name}</div>
                                 <div className='product-title'>{plants.description}</div>
                                 <div className='product-title'>{plants.cost}</div>
-                                <button className='product-button' onClick={() => handleAddToCart(plants)}>Add To Cart</button>
+                                <button className={`product-button ${addedToCart.includes(plants.name) ? 'disabled': ''}`}
+                                    onClick={() => handleAddToCart(plants)}
+                                    disabled={addedToCart.includes(plants.name)}>
+                                    {addedToCart.includes(plants.name) ? 'Already added':'Add To Cart'} </button>
                             </div>
                         ))}
                     </div>
