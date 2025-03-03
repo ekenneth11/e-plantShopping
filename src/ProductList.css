@@ -174,6 +174,7 @@ body {
 .cart{
     color: white;
     display: flex;
+    text-align: center;
 }
 .cart_quantity_count{
     margin-top: 16px;
